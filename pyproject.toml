@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "hexlet-code"
+version = "0.1.0"
+description = "Page-loader"
+authors = ["Dmitri Spirin <yamsky.xbox@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pytest = ">= 6.2.5"
+coverage = "^6.4.1"
+pytest-cov = "^3.0.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

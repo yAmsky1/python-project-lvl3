@@ -1,0 +1,36 @@
+name: CI
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: install deps
+        run: |
+          pip install poetry
+          poetry install
+
+      - name: run linter
+        run: make lint
+
+      -name: run tests
+       run: make test
+
+      - name: create reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+
+      - name: test-coverage
+        run: make test-cov
+
+      - name: send reporter
+        env:
+          GITHUB_TOKEN: ${{ secrets.TEST_REPORTER_ID }}
+        run: ./cc-test-reporter after-build -r "$GITHUB_TOKEN"
