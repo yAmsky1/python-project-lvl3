@@ -5,7 +5,10 @@ build:
 	poetry build
 
 publish:
-	poetry publish --drt-run
+	poetry publish --dry-run
+
+page-loader:
+	poetry run page_loader
 
 lint:
 	poetry run flake8 page-loader
