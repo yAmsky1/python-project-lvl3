@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+import os
 import argparse
 from page_loader import download_page
 
@@ -11,7 +12,7 @@ def main():
     parser.add_argument(
         "-o", "--output",
         help='Set the path to directory',
-        default=''
+        default=os.getcwd()
     )
     args = parser.parse_args()
     print(download_page(args.page_url, args.output))
