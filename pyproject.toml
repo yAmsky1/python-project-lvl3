@@ -12,6 +12,7 @@ python = "^3.8"
 coverage = "^6.4.1"
 requests = "^2.28.0"
 requests-mock = "^1.9.3"
+testresources = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
