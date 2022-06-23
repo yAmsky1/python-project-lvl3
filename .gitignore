@@ -5,3 +5,4 @@ dist/
 cc-test-reporter
 .coverage
 coverage.xml
+downloads/

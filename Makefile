@@ -11,7 +11,7 @@ page-loader:
 	poetry run page_loader
 
 lint:
-	poetry run flake8 page-loader
+	poetry run flake8 page_loader
 
 test:
 	poetry run pytest

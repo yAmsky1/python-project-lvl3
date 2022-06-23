@@ -5,3 +5,4 @@
 [![Linter](https://github.com/yamsky1/python-project-lvl2/actions/workflows/ci.yml/badge.svg)](https://github.com/yamsky1/python-project-lvl2/actions/workflows/ci.yml)
 
 ## Загрузчик страниц
+[![asciicast](https://asciinema.org/a/UGL3482NSTQ0eQrMFex7AjWPR.svg)](https://asciinema.org/a/UGL3482NSTQ0eQrMFex7AjWPR)
