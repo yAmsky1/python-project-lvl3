@@ -8,7 +8,7 @@ publish:
 	poetry publish --dry-run
 
 page-loader:
-	poetry run page_loader
+	poetry run start_page_loader
 
 lint:
 	poetry run flake8 page_loader
@@ -17,7 +17,7 @@ test:
 	poetry run pytest
 
 test-cov:
-	poetry run pytest --cov=page-loader --cov-report xml
+	poetry run pytest --cov=page_loader --cov-report xml
 
 package-install:
 	python3 -m pip install --user dist/*.whl
