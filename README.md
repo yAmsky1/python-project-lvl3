@@ -6,3 +6,4 @@
 
 ## Загрузчик страниц
 [![asciicast](https://asciinema.org/a/UGL3482NSTQ0eQrMFex7AjWPR.svg)](https://asciinema.org/a/UGL3482NSTQ0eQrMFex7AjWPR)
+[![asciicast](https://asciinema.org/a/GTO5jXHv7oPkpNn3V2N5cOt0o.svg)](https://asciinema.org/a/GTO5jXHv7oPkpNn3V2N5cOt0o)
