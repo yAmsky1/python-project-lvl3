@@ -1,0 +1,6 @@
+Page from https://ru.hexlet.io/courses has been loaded
+Resource from https://ru.hexlet.io/courses has been loaded
+Resource from https://ru.hexlet.io/courses has been loaded
+Image from https://ru.hexlet.io/courses has been loaded
+Resource from https://ru.hexlet.io/courses has been loaded
+Page and resources from https://ru.hexlet.io/courses has been loaded
