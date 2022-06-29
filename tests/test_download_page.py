@@ -2,7 +2,7 @@ import tempfile
 import requests_mock
 import os
 import pytest
-from page_loader.download_page import download_page
+from page_loader.download import download_page
 from page_loader.name_formatter import get_file_name
 
 
