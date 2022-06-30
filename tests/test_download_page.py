@@ -2,28 +2,42 @@ import tempfile
 import requests_mock
 import os
 import pytest
+
 from page_loader.download import download_page
-from page_loader.name_formatter import get_file_name
+from page_loader.name_formatter import get_name
+from tests.file_reader import read_file
 
 
 FILES_COUNT = 4
 SITE_PATH = '/courses'
-URL = 'https://ru.hexlet.io'
-SITE_FILES_DIR = 'ru-hexlet-io-courses_files'
+BASE_URL = 'https://ru.hexlet.io'
+PAGE_FILES_DIR = 'ru-hexlet-io-courses_files'
+MODE = {'IMAGE': 'rb', 'TEXT': 'r'}
 
 
 @pytest.fixture()
 def content():
-    with open('tests/fixtures/file1.html', 'r') as text:
-        content = text.read()
-    return content
+    return read_file('tests/fixtures/file1.html', MODE.get('TEXT'))
 
 
 @pytest.fixture()
 def image():
-    with open('tests/fixtures/nodejs.png', 'rb') as img:
-        image = img.read()
-    return image
+    return read_file('tests/fixtures/nodejs.png', MODE.get('IMAGE'))
+
+
+@pytest.fixture()
+def style():
+    return read_file('tests/fixtures/style.css', MODE.get('TEXT'))
+
+
+@pytest.fixture()
+def script():
+    return read_file('tests/fixtures/script.js', MODE.get('TEXT'))
+
+
+@pytest.fixture()
+def html():
+    return read_file('tests/fixtures/page_without_res.html', MODE.get('TEXT'))
 
 
 @pytest.fixture()
@@ -36,34 +50,58 @@ def correct_names():
     }
 
 
-def read_file(file_path):
-    with open(file_path, 'r') as data:
-        correct_data = data.read()
-    return correct_data
+def test_process_loader(content, correct_names, image, style, script):
+    #
+    with requests_mock.Mocker() as mock:
+        mock.get(BASE_URL + SITE_PATH, text=content)
+        mock.get(BASE_URL + '/assets/professions/nodejs.png', content=image)
+        mock.get(BASE_URL + '/assets/application.css', text=style)
+        mock.get(BASE_URL + '/packs/js/runtime.js', text=script)
 
-
-def test_process_loader(content, correct_names, image):
-
-    with requests_mock.Mocker() as resp:
-        resp.get(URL + SITE_PATH, text=content)
-        resp.get(URL + '/assets/professions/nodejs.png', content=image)
-        resp.get(URL + '/assets/application.css', text=read_file('tests/fixtures/style.css'))
-        resp.get(URL + '/packs/js/runtime.js', text=read_file('tests/fixtures/script.js'))
         with tempfile.TemporaryDirectory() as temp:
-            correct_html = read_file('tests/fixtures/html_result.html')
+
+            correct_html = read_file('tests/fixtures/html_result.html', MODE.get('TEXT'))
             correct_path = os.path.join(temp, correct_names.get('html'))
-            result_path = download_page(URL + SITE_PATH, temp)
-            image_path = os.path.join(temp, SITE_FILES_DIR, correct_names.get('img'))
-            css_path = os.path.join(temp, SITE_FILES_DIR, correct_names.get('css'))
-            image_name = get_file_name(URL + '/assets/professions/nodejs.png')
-            css_name = get_file_name(URL + '/assets/application.css')
-            assert read_file(result_path) == correct_html
-            assert read_file(css_path) == read_file('tests/fixtures/style.css')
-            files_count = len(os.listdir(os.path.join(temp, os.path.splitext(get_file_name(URL+SITE_PATH))[0] + '_files')))
-            assert files_count == FILES_COUNT
-            with open(os.path.join(image_path), 'rb') as image_file:
-                received_image = image_file.read()
-                assert received_image == image
-            assert css_name == correct_names.get('css')
-            assert image_name == correct_names.get('img')
+            result_path = download_page(BASE_URL + SITE_PATH, temp)
+            assert read_file(result_path, MODE.get('TEXT')) == correct_html
             assert result_path == correct_path
+
+            image_path = os.path.join(temp, PAGE_FILES_DIR, correct_names.get('img'))
+            image_name = get_name(BASE_URL + '/assets/professions/nodejs.png')
+            assert image_name == correct_names.get('img')
+            assert read_file(image_path, MODE.get('IMAGE')) == image
+
+            css_path = os.path.join(temp, PAGE_FILES_DIR, correct_names.get('css'))
+            css_name = get_name(BASE_URL + '/assets/application.css')
+            assert read_file(css_path, MODE.get('TEXT')) == style
+            assert css_name == correct_names.get('css')
+
+            js_path = os.path.join(temp, PAGE_FILES_DIR, correct_names.get('js'))
+            js_name = get_name('https://ru.hexlet.io/packs/js/runtime.js')
+            assert read_file(js_path, MODE.get('TEXT'))
+            assert js_name == correct_names.get('js')
+
+            page_name, _ = os.path.splitext(get_name(BASE_URL + SITE_PATH))
+            files_count = len(os.listdir(os.path.join(temp, page_name + '_files')))
+            assert files_count == FILES_COUNT
+
+
+def test_download_page_without_res(correct_names, html):
+    with requests_mock.Mocker() as mock:
+        mock.get(BASE_URL + SITE_PATH, text=html)
+        with tempfile.TemporaryDirectory() as temp:
+            page_path = download_page(BASE_URL + SITE_PATH, temp)
+            correct_path = os.path.join(temp, correct_names.get('html'))
+            assert read_file(page_path, MODE.get('TEXT')) == html
+            assert page_path == correct_path
+
+
+@pytest.mark.parametrize('url, exception', [
+    ('ru.hexlet.io', 'WRONG ADDRESS!'),
+    ('sptth://ru.hexlet.io', 'WRONG ADDRESS!'),
+    ('https://fgjkhds.org/', 'CONNECTION ERROR!')
+])
+def test_download_with_errors(url,  exception):
+    with tempfile.TemporaryDirectory() as temp:
+        with pytest.raises(Exception):
+            download_page(url, temp)

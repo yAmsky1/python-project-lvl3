@@ -1,13 +1,10 @@
 import logging
-import sys
 
 
 def set_n_get_logger(name):
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
-    stdout_handler = logging.StreamHandler(stream=sys.stdout)
-    file_handler = logging.FileHandler('.log.txt')
-    logger.addHandler(stdout_handler)
+    file_handler = logging.FileHandler('.log.txt', 'w')
     logger.addHandler(file_handler)
     return logger
 

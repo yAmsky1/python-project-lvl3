@@ -2,10 +2,11 @@ import os
 from urllib.parse import urlparse
 
 
-def get_file_name(url):
+def get_name(url, directory=False):
     draft_name, ext = process_url(url)
-    name = format_file_name(draft_name, ext)
-    return name
+    if directory:
+        return format_name(draft_name, directory=True)
+    return format_name(draft_name, ext=ext)
 
 
 def process_url(url):
@@ -19,12 +20,14 @@ def process_url(url):
         return name, ext
 
 
-def format_file_name(file_name, ext):
+def format_name(name, ext=None, directory=False):
     if not ext:
         ext = '.html'
-    for symbol in file_name:
+    for symbol in name:
         if not symbol.isalnum():
-            file_name = file_name.replace(symbol, '-')
-    if file_name.endswith('-'):
-        file_name = file_name[:-1]
-    return file_name + ext
+            name = name.replace(symbol, '-')
+    if name.endswith('-'):
+        name = name[:-1]
+    if directory:
+        return name + '_files'
+    return name + ext

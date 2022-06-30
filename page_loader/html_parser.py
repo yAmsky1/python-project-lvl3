@@ -2,7 +2,8 @@ from bs4 import BeautifulSoup
 import os
 import requests
 from urllib.parse import urljoin, urlparse, urlunparse
-from page_loader.name_formatter import get_file_name
+from page_loader.name_formatter import get_name
+from page_loader.logger import set_n_get_logger
 
 
 TAGS_ATTRIBUTES = {
@@ -12,16 +13,34 @@ TAGS_ATTRIBUTES = {
 }
 
 
+logger = set_n_get_logger(__name__)
+
+
 def make_parser(html_page):
     return BeautifulSoup(html_page, 'lxml')
 
 
 def parse_(files_dir_path, base_url):
-    html_ = requests.get(base_url).content
-    parser = make_parser(html_)
-    resources_paths = parser.find_all(list(TAGS_ATTRIBUTES.keys()))
-    resources = get_resources(resources_paths, files_dir_path, base_url)
-    html_page = parser.prettify()
+    try:
+        html_ = requests.get(base_url)
+        parser = make_parser(html_.text)
+        resources_paths = parser.find_all(list(TAGS_ATTRIBUTES.keys()))
+        resources = get_resources(resources_paths, files_dir_path, base_url)
+        html_page = parser.prettify()
+
+    except (requests.exceptions.MissingSchema,
+            requests.exceptions.InvalidSchema) as e:
+        logger.error('WRONG ADDRESS! Check URL-address')
+        raise Exception('WRONG ADDRESS!') from e
+
+    except requests.exceptions.HTTPError as e:
+        logger.error('CONNECTION ERROR! Check URL-address')
+        raise Exception('CONNECTION ERROR!') from e
+
+    except requests.exceptions.ConnectionError as e:
+        logger.error('CONNECTION ERROR! Check URL-address')
+        raise Exception('CONNECTION ERROR!') from e
+
     return resources, html_page
 
 
@@ -63,13 +82,13 @@ def get_resources(resources_paths, files_dir_path, base_url):
         if not full_resource_url:
             continue
 
-        resource_file_name = get_file_name(full_resource_url)
+        resource_file_name = get_name(full_resource_url)
         new_resource_path = os.path.join(
             os.path.basename(files_dir_path),
             resource_file_name
         )
         tag[attribute] = new_resource_path
         resource_file_path = os.path.join(files_dir_path, resource_file_name)
-        resources.append((full_resource_url, resource_file_path))
+        resources.append((full_resource_url, resource_file_path, tag.name))
 
     return resources
