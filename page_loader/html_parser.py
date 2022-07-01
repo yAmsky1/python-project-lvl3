@@ -25,7 +25,8 @@ def parse_(files_dir_path, base_url):
 
     try:
         logger.info('trying to connect')
-        html_ = requests.get(base_url)
+        response = requests.get(base_url)
+        response.raise_for_status()
         logger.info('successful connection')
 
     except (requests.exceptions.MissingSchema,
@@ -42,7 +43,7 @@ def parse_(files_dir_path, base_url):
         raise Exception('CONNECTION ERROR!') from e
 
     else:
-        parser = make_parser(html_.text)
+        parser = make_parser(response.text)
         resources_paths = parser.find_all(list(TAGS_ATTRIBUTES.keys()))
         resources = prepare_resources(resources_paths,
                                       files_dir_path, base_url)
