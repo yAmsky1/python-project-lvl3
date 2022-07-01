@@ -5,10 +5,10 @@ import sys
 import os
 import argparse
 from page_loader import download_page
-from page_loader.logger import set_n_get_logger
+from page_loader.logger import cfd_and_get_logger
 
 
-logger = set_n_get_logger(__name__)
+logger = cfd_and_get_logger(__name__)
 
 
 def main():
@@ -21,11 +21,13 @@ def main():
     )
     args = parser.parse_args()
     try:
-        print(download_page(args.page_url, args.output))
+        path = download_page(args.page_url, args.output)
     except Exception as e:
         logger.info(e)
         logger.error('Page was not downloaded, see log file')
         sys.exit(1)
+    else:
+        print(f"Page successfully downloaded into {path}")
 
 
 if __name__ == '__main__':

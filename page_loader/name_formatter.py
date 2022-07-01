@@ -16,7 +16,8 @@ def process_url(url):
         return name, ext
 
     else:
-        name, ext = os.path.splitext(urlparse(url).netloc)
+        name = urlparse(url).netloc
+        ext = None
         return name, ext
 
 

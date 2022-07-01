@@ -5,8 +5,15 @@
 [![Linter](https://github.com/yamsky1/python-project-lvl2/actions/workflows/ci.yml/badge.svg)](https://github.com/yamsky1/python-project-lvl2/actions/workflows/ci.yml)
 
 ## Загрузчик страниц
-[![asciicast](https://asciinema.org/a/UGL3482NSTQ0eQrMFex7AjWPR.svg)](https://asciinema.org/a/UGL3482NSTQ0eQrMFex7AjWPR)
-[![asciicast](https://asciinema.org/a/GTO5jXHv7oPkpNn3V2N5cOt0o.svg)](https://asciinema.org/a/GTO5jXHv7oPkpNn3V2N5cOt0o)
-[![asciicast](https://asciinema.org/a/DwEYdo2MPYIapBNmUPhvzjg5U.svg)](https://asciinema.org/a/DwEYdo2MPYIapBNmUPhvzjg5U)
-[![asciicast](https://asciinema.org/a/135zycPjPKRcKJANFFDvV6StY.svg)](https://asciinema.org/a/135zycPjPKRcKJANFFDvV6StY)
-[![asciicast](https://asciinema.org/a/UzUsUC12gQQRWMetFo38qEP4m.svg)](https://asciinema.org/a/UzUsUC12gQQRWMetFo38qEP4m)
+
+### Установка:
+
+`pip install --user git+https://github.com/yamsky1/python-project-lvl3`
+
+### Запуск:
+
+- Справочная информация: `page-loader -h`
+- Вызов программы: `page-loader --output path/to/downloads url-address`
+
+### Примеры работы программы:
+[![asciicast](https://asciinema.org/a/F06Q9UeDkSbHLW1OrSD1yeHBa.svg)](https://asciinema.org/a/F06Q9UeDkSbHLW1OrSD1yeHBa)

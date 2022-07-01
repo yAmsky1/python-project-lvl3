@@ -3,7 +3,7 @@ import os
 import requests
 from urllib.parse import urljoin, urlparse, urlunparse
 from page_loader.name_formatter import get_name
-from page_loader.logger import set_n_get_logger
+from page_loader.logger import cfd_and_get_logger
 from progress.bar import ChargingBar
 
 
@@ -14,7 +14,7 @@ TAGS_ATTRIBUTES = {
 }
 
 
-logger = set_n_get_logger(__name__)
+logger = cfd_and_get_logger(__name__)
 
 
 def make_parser(html_page):
@@ -22,13 +22,11 @@ def make_parser(html_page):
 
 
 def parse_(files_dir_path, base_url):
+
     try:
+        logger.info('trying to connect')
         html_ = requests.get(base_url)
-        parser = make_parser(html_.text)
-        resources_paths = parser.find_all(list(TAGS_ATTRIBUTES.keys()))
-        resources = prepare_resources(resources_paths,
-                                      files_dir_path, base_url)
-        html_page = parser.prettify()
+        logger.info('successful connection')
 
     except (requests.exceptions.MissingSchema,
             requests.exceptions.InvalidSchema) as e:
@@ -43,12 +41,19 @@ def parse_(files_dir_path, base_url):
         logger.error('CONNECTION ERROR! Check URL-address')
         raise Exception('CONNECTION ERROR!') from e
 
+    else:
+        parser = make_parser(html_.text)
+        resources_paths = parser.find_all(list(TAGS_ATTRIBUTES.keys()))
+        resources = prepare_resources(resources_paths,
+                                      files_dir_path, base_url)
+        html_page = parser.prettify()
     return resources, html_page
 
 
 def prepare_resources(resources_paths, files_dir_path, base_url):
     resources = []
-    progress = ChargingBar('Processing resources', max=len(resources_paths))
+    logger.info('start preparing resources')
+    progress = ChargingBar('preparing resources...', max=len(resources_paths))
     parsed_base_url = urlparse(base_url)
 
     for tag in resources_paths:
@@ -96,5 +101,6 @@ def prepare_resources(resources_paths, files_dir_path, base_url):
         resource_file_path = os.path.join(files_dir_path, resource_file_name)
         resources.append((full_resource_url, resource_file_path, tag.name))
     progress.finish()
+    logger.info('resource preparation completed')
 
     return resources

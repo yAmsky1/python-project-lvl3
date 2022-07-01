@@ -50,8 +50,8 @@ def correct_names():
     }
 
 
-def test_process_loader(content, correct_names, image, style, script):
-    #
+def test_download_page_with_res(content, correct_names, image, style, script):
+
     with requests_mock.Mocker() as mock:
         mock.get(BASE_URL + SITE_PATH, text=content)
         mock.get(BASE_URL + '/assets/professions/nodejs.png', content=image)
