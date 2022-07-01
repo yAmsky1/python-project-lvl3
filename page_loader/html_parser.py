@@ -4,6 +4,7 @@ import requests
 from urllib.parse import urljoin, urlparse, urlunparse
 from page_loader.name_formatter import get_name
 from page_loader.logger import set_n_get_logger
+from progress.bar import ChargingBar
 
 
 TAGS_ATTRIBUTES = {
@@ -25,7 +26,8 @@ def parse_(files_dir_path, base_url):
         html_ = requests.get(base_url)
         parser = make_parser(html_.text)
         resources_paths = parser.find_all(list(TAGS_ATTRIBUTES.keys()))
-        resources = get_resources(resources_paths, files_dir_path, base_url)
+        resources = prepare_resources(resources_paths,
+                                      files_dir_path, base_url)
         html_page = parser.prettify()
 
     except (requests.exceptions.MissingSchema,
@@ -44,10 +46,13 @@ def parse_(files_dir_path, base_url):
     return resources, html_page
 
 
-def get_resources(resources_paths, files_dir_path, base_url):
+def prepare_resources(resources_paths, files_dir_path, base_url):
     resources = []
+    progress = ChargingBar('Processing resources', max=len(resources_paths))
     parsed_base_url = urlparse(base_url)
+
     for tag in resources_paths:
+        progress.next()
         full_resource_url = ''
         attribute = TAGS_ATTRIBUTES.get(tag.name)
         resource_url = tag.get(attribute)
@@ -90,5 +95,6 @@ def get_resources(resources_paths, files_dir_path, base_url):
         tag[attribute] = new_resource_path
         resource_file_path = os.path.join(files_dir_path, resource_file_name)
         resources.append((full_resource_url, resource_file_path, tag.name))
+    progress.finish()
 
     return resources

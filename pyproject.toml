@@ -15,6 +15,7 @@ requests-mock = "^1.9.3"
 testresources = "^2.0.1"
 bs4 = "^0.0.1"
 lxml = "^4.9.0"
+progress = "^1.6"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
