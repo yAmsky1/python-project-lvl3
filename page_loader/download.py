@@ -11,9 +11,10 @@ logger = cfd_and_get_logger(__name__)
 
 
 def download(base_url, output_path):
-    logger.info('start page download from %s', base_url)
     if not os.path.exists(output_path):
-        os.mkdir(output_path)
+        logger.error('output directory %s does not exist!', output_path)
+        raise IOError('output directory does not exist!')
+    logger.info('start page download from %s', base_url)
     page_file_name = get_name(base_url)
     page_output_path = os.path.join(output_path, page_file_name)
     file_dir_name = get_name(base_url, directory=True)

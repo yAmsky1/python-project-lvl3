@@ -105,3 +105,12 @@ def test_download_with_errors(url,  exception):
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(Exception):
             download(url, temp)
+
+
+@pytest.mark.parametrize('url, output_path', [
+    ('https://ru.hexlet.io', ''),
+    ('https://ru.hexlet.io', '$%^@*&////'),
+])
+def test_storage_errors(url, output_path):
+    with pytest.raises(IOError):
+        download(url, output_path)
