@@ -3,7 +3,7 @@ import requests_mock
 import os
 import pytest
 
-from page_loader.download import download_page
+from page_loader.download import download
 from page_loader.name_formatter import get_name
 from tests.file_reader import read_file
 
@@ -62,7 +62,7 @@ def test_download_page_with_res(content, correct_names, image, style, script):
 
             correct_html = read_file('tests/fixtures/html_result.html', MODE.get('TEXT'))
             correct_path = os.path.join(temp, correct_names.get('html'))
-            result_path = download_page(BASE_URL + SITE_PATH, temp)
+            result_path = download(BASE_URL + SITE_PATH, temp)
             assert read_file(result_path, MODE.get('TEXT')) == correct_html
             assert result_path == correct_path
 
@@ -90,7 +90,7 @@ def test_download_page_without_res(correct_names, html):
     with requests_mock.Mocker() as mock:
         mock.get(BASE_URL + SITE_PATH, text=html)
         with tempfile.TemporaryDirectory() as temp:
-            page_path = download_page(BASE_URL + SITE_PATH, temp)
+            page_path = download(BASE_URL + SITE_PATH, temp)
             correct_path = os.path.join(temp, correct_names.get('html'))
             assert read_file(page_path, MODE.get('TEXT')) == html
             assert page_path == correct_path
@@ -104,4 +104,4 @@ def test_download_page_without_res(correct_names, html):
 def test_download_with_errors(url,  exception):
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(Exception):
-            download_page(url, temp)
+            download(url, temp)

@@ -4,7 +4,7 @@
 import sys
 import os
 import argparse
-from page_loader import download_page
+from page_loader import download
 from page_loader.logger import cfd_and_get_logger
 
 
@@ -21,7 +21,7 @@ def main():
     )
     args = parser.parse_args()
     try:
-        path = download_page(args.page_url, args.output)
+        path = download(args.page_url, args.output)
     except Exception as e:
         logger.info(e)
         logger.error('Page was not downloaded, see log file')

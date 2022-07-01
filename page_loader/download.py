@@ -10,7 +10,7 @@ from progress.bar import ChargingBar
 logger = cfd_and_get_logger(__name__)
 
 
-def download_page(base_url, output_path):
+def download(base_url, output_path):
     logger.info('start page download from %s', base_url)
     if not os.path.exists(output_path):
         os.mkdir(output_path)

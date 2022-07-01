@@ -1,4 +1,4 @@
-from page_loader.download import download_page
+from page_loader.download import download
 
 
-__all__ = ['download_page']
+__all__ = ['download']
