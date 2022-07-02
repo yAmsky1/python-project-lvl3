@@ -1,7 +1,7 @@
 import requests
 import os
 from page_loader.name_formatter import get_name
-from page_loader.output import create_directory, save_as_file
+from page_loader.output import create_directory, save_as_file, save_html_page
 from page_loader.html_parser import parse_
 from page_loader.logger import cfd_and_get_logger
 from progress.bar import ChargingBar
@@ -25,13 +25,12 @@ def download(base_url, output_path):
         create_directory(files_dir_path)
         download_resources(resources)
 
-    save_as_file(html_page, page_output_path, tag='html')
+    save_html_page(html_page, page_output_path)
     logger.info("page and resources from %s has been loaded", base_url)
     return page_output_path
 
 
 def download_resources(resources):
-
     progress = ChargingBar('downloading resources...', max=len(resources))
 
     for resource_url, resource_path, tag in resources:
