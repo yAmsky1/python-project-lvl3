@@ -18,7 +18,7 @@ logger = cfd_and_get_logger(__name__)
 
 
 def make_parser(html_page):
-    return BeautifulSoup(html_page, 'lxml')
+    return BeautifulSoup(html_page, 'html.parser')
 
 
 def parse_(files_dir_path, base_url):
@@ -52,10 +52,14 @@ def parse_(files_dir_path, base_url):
 
 
 def prepare_resources(resources_paths, files_dir_path, base_url):
-    resources = []
     logger.info('start preparing resources')
     progress = ChargingBar('preparing resources...', max=len(resources_paths))
+    resources = []
     parsed_base_url = urlparse(base_url)
+    domain = urlunparse(
+        (parsed_base_url.scheme, parsed_base_url.netloc, '', '', '', '')
+    )
+    parsed_domain = urlparse(domain)
 
     for tag in resources_paths:
         progress.next()
@@ -65,15 +69,15 @@ def prepare_resources(resources_paths, files_dir_path, base_url):
         parsed_resource_url = urlparse(resource_url)
 
         if not parsed_resource_url.netloc:
-            full_resource_url = urljoin(base_url, resource_url)
+            full_resource_url = urljoin(domain, resource_url)
 
-        if parsed_resource_url.netloc == parsed_base_url.netloc:
+        if parsed_resource_url.netloc == parsed_domain.netloc:
 
             if parsed_resource_url.scheme:
                 url_scheme = parsed_resource_url.scheme
 
             else:
-                url_scheme = parsed_base_url.scheme
+                url_scheme = parsed_domain.scheme
 
             url_netloc = parsed_resource_url.netloc
             url_path = parsed_resource_url.path

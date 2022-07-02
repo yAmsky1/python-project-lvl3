@@ -31,7 +31,7 @@ def download(base_url, output_path):
 
 
 def download_resources(resources):
-    logger.info("start downloading resources")
+
     progress = ChargingBar('downloading resources...', max=len(resources))
 
     for resource_url, resource_path, tag in resources:
@@ -40,4 +40,3 @@ def download_resources(resources):
         save_as_file(resource, resource_path, tag)
 
     progress.finish()
-    logger.info("resources download completed")

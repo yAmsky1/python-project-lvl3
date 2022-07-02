@@ -114,3 +114,13 @@ def test_download_with_errors(url,  exception):
 def test_storage_errors(url, output_path):
     with pytest.raises(IOError):
         download(url, output_path)
+
+# def test_download_page_with_res(content, correct_names, image, style, script):
+# #
+#     with requests_mock.Mocker() as mock:
+#         mock.get(BASE_URL + SITE_PATH, text=content)
+#         mock.get(BASE_URL + '/photos/me.jpg', content=image)
+#         mock.get(BASE_URL + '/blog/about/assets/styles.css', text=style)
+#         mock.get(BASE_URL + '/packs/js/runtime.js', text=script)
+#
+#         with tempfile.TemporaryDirectory() as temp:
