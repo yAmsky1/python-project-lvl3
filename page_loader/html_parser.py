@@ -43,7 +43,7 @@ def parse_(files_dir_path, base_url):
         raise Exception('CONNECTION ERROR!') from e
 
     else:
-        parser = make_parser(response.text)
+        parser = make_parser(response.content)
         resources_paths = parser.find_all(list(TAGS_ATTRIBUTES.keys()))
         resources = prepare_resources(resources_paths,
                                       files_dir_path, base_url)
