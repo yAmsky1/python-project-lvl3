@@ -101,7 +101,7 @@ def test_download_page_without_res(correct_names, html):
     ('sptth://ru.hexlet.io', 'WRONG ADDRESS!'),
     ('https://site.com/404', 'CONNECTION ERROR!')
 ])
-def test_download_with_errors(url,  exception):
+def test_download_with_errors(url, exception):
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(Exception):
             download(url, temp)
