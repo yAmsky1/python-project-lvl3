@@ -4,7 +4,7 @@ import logging
 fmt = '[%(asctime)s %(levelname)s]:%(message)s'
 
 
-def cfd_and_get_logger(name=None):
+def cfg_and_get_logger(name=None):  # config and get logger.
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     info_handler = logging.FileHandler('.logs.log')

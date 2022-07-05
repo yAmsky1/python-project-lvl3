@@ -5,10 +5,10 @@ import sys
 import os
 import argparse
 from page_loader import download
-from page_loader.logger import cfd_and_get_logger
+from page_loader.logger import cfg_and_get_logger
 
 
-logger = cfd_and_get_logger(__name__)
+logger = cfg_and_get_logger(__name__)
 
 
 def main():

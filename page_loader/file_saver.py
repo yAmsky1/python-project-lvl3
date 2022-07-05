@@ -1,17 +1,17 @@
 import os
-from page_loader.logger import cfd_and_get_logger
+from page_loader.logger import cfg_and_get_logger
 
 
-logger = cfd_and_get_logger(__name__)
+logger = cfg_and_get_logger(__name__)
 
 
-def save_as_file(data, path, tag):
-    logger.info("start downloading %s", tag)
+def save_as_file(data, path):
+    logger.info("start downloading resource into %s", path)
 
     with open(path, 'wb') as file:
         file.write(data.content)
 
-    logger.info("%s download completed", tag)
+    logger.info("resource download completed")
     return
 
 
