@@ -3,7 +3,7 @@ import os
 
 from urllib.parse import urljoin, urlparse, urlunparse
 from page_loader.name_formatter import get_file_name
-from page_loader.logger import cfg_and_get_logger
+from page_loader.logger import get_logger
 from progress.bar import ChargingBar
 
 
@@ -14,7 +14,7 @@ TAGS_ATTRIBUTES = {
 }
 
 
-logger = cfg_and_get_logger(__name__)
+logger = get_logger(__name__)
 
 
 def parse_html_page(page, files_dir_path, base_url):

@@ -1,21 +1,21 @@
 import os
-from page_loader.logger import cfg_and_get_logger
+from page_loader.logger import get_logger
 
 
-logger = cfg_and_get_logger(__name__)
+logger = get_logger(__name__)
 
 
-def save_as_file(data, path):
+def save_data_as_file(data, path):
     logger.info("start downloading resource into %s", path)
 
     with open(path, 'wb') as file:
-        file.write(data.content)
+        file.write(data)
 
     logger.info("resource download completed")
     return
 
 
-def save_html_page(data, path):
+def save_text_as_file(data, path):
     with open(path, 'w') as file:
         file.write(data)
 

@@ -1,11 +1,21 @@
 import requests
-from page_loader.logger import cfg_and_get_logger
+from page_loader.logger import get_logger
 
 
-logger = cfg_and_get_logger(__name__)
+logger = get_logger(__name__)
 
 
-def load_page(url):
+def load_content(url):
+    response = load(url)
+    return response.content
+
+
+def load_text(url):
+    response = load(url)
+    return response.text
+
+
+def load(url):
     try:
         logger.info('trying to connect')
         response = requests.get(url)
@@ -26,4 +36,4 @@ def load_page(url):
         raise Exception('CONNECTION ERROR!') from e
 
     else:
-        return response.text
+        return response
